@@ -1,0 +1,38 @@
+.profile {
+  width: 300px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.upload {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  left: 0px;
+  right: 0px;
+  z-index: 1;
+  position: absolute;
+  margin: auto;
+  background: rgba(0, 0, 0, 0);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.upload:hover {
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.upload > .icon {
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+.upload:hover > .icon {
+  opacity: 1;
+}

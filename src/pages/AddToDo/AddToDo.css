@@ -1,0 +1,7 @@
+.add-to-do {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  justify-content: space-between;
+}
