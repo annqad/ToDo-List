@@ -1,9 +1,7 @@
 import { memo, useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { ADD_TASK_REQUEST } from "../../constants/tasks";
-import { PageWrapper } from "../../components/PageWrapper/PageWrapper";
-// import { getInputDate } from "../../helpers";
+import { ADD_TASK_REQUEST } from "../../../../constants/tasks";
 import "./AddToDo.css";
 
 export const AddToDo = memo(() => {
@@ -38,23 +36,22 @@ export const AddToDo = memo(() => {
   };
 
   return (
-    <PageWrapper>
-      <div className="add-to-do">
-        <TextField
-          label="Title"
-          margin="dense"
-          value={title}
-          onChange={handleChangeTitle}
-        />
-        <TextField
-          label="Description"
-          margin="dense"
-          multiline
-          minRows={2}
-          value={description}
-          onChange={handleChangeDescription}
-        />
-        {/* <TextField
+    <div className="add-to-do">
+      <TextField
+        label="Title"
+        margin="dense"
+        value={title}
+        onChange={handleChangeTitle}
+      />
+      <TextField
+        label="Description"
+        margin="dense"
+        multiline
+        minRows={2}
+        value={description}
+        onChange={handleChangeDescription}
+      />
+      {/* <TextField
           label="Remind"
           type="datetime-local"
           margin="dense"
@@ -62,15 +59,14 @@ export const AddToDo = memo(() => {
           inputProps={{ min: getInputDate() }}
           onChange={handleChangeRemind}
         /> */}
-        <Button
-          variant="outlined"
-          sx={{ marginTop: "8px" }}
-          disabled={!title || !description}
-          onClick={handleAddTask}
-        >
-          ADD
-        </Button>
-      </div>
-    </PageWrapper>
+      <Button
+        variant="outlined"
+        sx={{ marginTop: "8px" }}
+        disabled={!title || !description}
+        onClick={handleAddTask}
+      >
+        ADD
+      </Button>
+    </div>
   );
 });

@@ -1,6 +1,7 @@
 import { useState, useRef, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToDoTask } from "./components/ToDoTask/ToDoTask";
+import { AddToDo } from "./components/AddToDo/AddToDo";
 import {
   DELETE_TASK_REQUEST,
   CHANGE_TASK_REQUEST,
@@ -73,6 +74,7 @@ export const ToDoList = memo(() => {
   return (
     <PageWrapper>
       <div className="to-do-list">
+        <AddToDo />
         {tasks.map((task, index) => (
           <ToDoTask
             key={task.id}

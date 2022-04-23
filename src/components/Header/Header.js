@@ -19,7 +19,6 @@ import { LOGOUT_REQUEST } from "../../constants/user";
 import {
   pages,
   settings,
-  ADD_TO_DO_PAGE,
   TO_DO_LIST_PAGE,
   PROFILE_SETTING,
   LOGOUT_SETTING,
@@ -46,9 +45,6 @@ export const Header = memo(() => {
 
   const handlePage = (page) => () => {
     switch (page) {
-      case ADD_TO_DO_PAGE:
-        navigate("/to-do/add");
-        break;
       case TO_DO_LIST_PAGE:
         navigate("/to-do/list");
         break;
