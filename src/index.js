@@ -9,6 +9,7 @@ import { errorMiddleware, userMiddleware } from "./middlewares";
 import appSaga from "./sagas";
 import rootReducer from "./reducers";
 import reportWebVitals from "./reportWebVitals";
+import "./serviceWorker";
 import "./index.css";
 
 const sagaMiddleware = createSagaMiddleware();

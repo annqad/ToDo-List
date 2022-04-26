@@ -1,3 +1,5 @@
+import { publicVAPIDKey } from "./config";
+
 export const isAuth = () => !!localStorage.getItem("token");
 
 export const setAuth = (token) => localStorage.setItem("token", token);
@@ -90,4 +92,85 @@ export const getInputDate = () => {
   }
 
   return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
+export const URLBase64ToUint8Array = (base64String) => {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+};
+
+export const checkNotificationSupport = () => "Notification" in window;
+
+export const checkNotificationPromise = () => {
+  try {
+    Notification.requestPermission().then();
+  } catch (error) {
+    return false;
+  }
+
+  return true;
+};
+
+export const getNotificationPermission = () => {
+  if (checkNotificationSupport()) {
+    return Notification.permission;
+  }
+
+  return false;
+};
+
+export const askNotificationPermission = async () => {
+  if (!checkNotificationSupport()) {
+    throw new Error("This browser does not support notifications.");
+  } else {
+    let result;
+    if (checkNotificationPromise()) {
+      result = await Notification.requestPermission().then(
+        (permission) => permission
+      );
+    } else {
+      result = await Notification.requestPermission((permission) => permission);
+    }
+
+    if (result === "denied") {
+      throw new Error("Enable notifications in browser settings.");
+    }
+
+    return result;
+  }
+};
+
+export const getServiceWorkerRegistration = async () =>
+  navigator.serviceWorker.ready.then(
+    (serviceWorkerRegistration) => serviceWorkerRegistration
+  );
+
+export const subscribeToNotifications = async () => {
+  const registration = await getServiceWorkerRegistration();
+
+  const subscription = registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: URLBase64ToUint8Array(publicVAPIDKey),
+  });
+
+  return subscription;
+};
+
+export const unsubscribeFromNotifications = async () => {
+  const subscription = await getNotificationsSubscription();
+  subscription?.unsubscribe();
+};
+
+export const getNotificationsSubscription = async () => {
+  const registration = await getServiceWorkerRegistration();
+
+  return registration.pushManager.getSubscription();
 };

@@ -1,3 +1,5 @@
+import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Avatar, TextField, Button, Box } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -5,19 +7,26 @@ import {
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
 } from "@mui/icons-material";
-import { Fragment, memo, useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { PageWrapper } from "../../components/PageWrapper/PageWrapper";
-import { fileToDataURL, getAudioDuration, keyToLabel } from "../../helpers";
+import { Loader } from "../../components/Loader/Loader";
+import {
+  askNotificationPermission,
+  fileToDataURL,
+  getAudioDuration,
+  keyToLabel,
+  subscribeToNotifications,
+  unsubscribeFromNotifications,
+  getInitials,
+} from "../../helpers";
 import { CHANGE_PROFILE_REQUEST } from "../../constants/user";
 import { SHOW_ERROR_ALERT } from "../../constants";
-import { getInitials } from "../../helpers";
 import "./Profile.css";
 
 export const Profile = memo(() => {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const profile = useSelector((state) => state.user.profile);
+  const [subscription, setSubscription] = useState();
   const [avatar, setAvatar] = useState();
   const [audio, setAudio] = useState();
   const [data, setData] = useState({
@@ -25,6 +34,7 @@ export const Profile = memo(() => {
     lastName: profile.lastName,
   });
 
+  const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
 
   const handleChange = (event) => {
@@ -55,7 +65,7 @@ export const Profile = memo(() => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = () =>
     dispatch({
       type: CHANGE_PROFILE_REQUEST,
       payload: {
@@ -63,9 +73,33 @@ export const Profile = memo(() => {
           ...data,
           ...(avatar ? { avatar } : {}),
           ...(audio ? { audio } : {}),
+          ...{ subscription },
         },
       },
     });
+
+  const handleNotifications = async () => {
+    try {
+      if (!subscription) {
+        const result = await askNotificationPermission();
+        if (result === "granted") {
+          setLoading(true);
+          const subscription = await subscribeToNotifications();
+          setSubscription(subscription.toJSON());
+          setLoading(false);
+        }
+      } else {
+        await unsubscribeFromNotifications();
+        setSubscription(null);
+      }
+    } catch (error) {
+      dispatch({
+        type: SHOW_ERROR_ALERT,
+        payload: {
+          error: error.message,
+        },
+      });
+    }
   };
 
   const handlePlay = (event) => {
@@ -82,10 +116,13 @@ export const Profile = memo(() => {
       firstName: profile.firstName,
       lastName: profile.lastName,
     });
+
+    setSubscription(profile.subscription);
   }, [profile]);
 
   return (
     <PageWrapper>
+      <Loader show={loading} />
       <div className="profile">
         <div className="avatar">
           <Box component="label" className="upload">
@@ -147,6 +184,13 @@ export const Profile = memo(() => {
             </Fragment>
           )}
           <input type="file" accept=".mp3" hidden onChange={handleAudio} />
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{ marginTop: "8px", marginBottom: "4px" }}
+          onClick={handleNotifications}
+        >
+          {`${subscription ? "DISABLE" : "ENABLE"} NOTIFICATIONS`}
         </Button>
         <Button
           variant="outlined"
