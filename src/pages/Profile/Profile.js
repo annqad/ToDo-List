@@ -1,4 +1,4 @@
-import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, TextField, Button, Box } from "@mui/material";
 import {
@@ -24,7 +24,6 @@ import "./Profile.css";
 
 export const Profile = memo(() => {
   const dispatch = useDispatch();
-  const inputRef = useRef();
   const profile = useSelector((state) => state.user.profile);
   const [subscription, setSubscription] = useState();
   const [avatar, setAvatar] = useState();
@@ -130,13 +129,7 @@ export const Profile = memo(() => {
               className="icon"
               sx={{ color: "#FFFFFF", fontSize: "50px" }}
             />
-            <input
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={handleImage}
-            />
+            <input type="file" accept="image/*" hidden onChange={handleImage} />
           </Box>
           <Avatar
             sx={{

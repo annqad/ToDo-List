@@ -11,7 +11,7 @@ import {
 import { fieldsToData } from "../../helpers";
 
 export const Modal = memo(
-  ({ show, title, body, fields = [], onClose, onConfirm }) => {
+  ({ show, title, body, fields = [], children, onClose, onConfirm }) => {
     const [data, setData] = useState({});
 
     const handleClose = () => {
@@ -42,8 +42,14 @@ export const Modal = memo(
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{ textTransform: "uppercase" }}
+        >
+          {title}
+        </DialogTitle>
         <DialogContent>
+          {children}
           <DialogContentText id="alert-dialog-description">
             {body}
           </DialogContentText>
@@ -55,7 +61,7 @@ export const Modal = memo(
               type={type}
               value={data[name]}
               margin="dense"
-              variant="standard"
+              variant="outlined"
               fullWidth
               onChange={handleChange}
             />

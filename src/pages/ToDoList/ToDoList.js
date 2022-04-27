@@ -1,7 +1,7 @@
 import { useState, useRef, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToDoTask } from "./components/ToDoTask/ToDoTask";
-import { AddToDo } from "./components/AddToDo/AddToDo";
+// import { AddToDo } from "./components/AddToDo/AddToDo";
 import {
   DELETE_TASK_REQUEST,
   CHANGE_TASK_REQUEST,
@@ -15,7 +15,7 @@ export const ToDoList = memo(() => {
   const TASK = useRef();
   const tasks = useSelector((state) => state.tasks.tasks);
 
-  const [showModal, setShowModal] = useState(null);
+  const [modal, setModal] = useState(null);
 
   const handleCheck = (id, completed) => () => {
     dispatch({
@@ -31,20 +31,20 @@ export const ToDoList = memo(() => {
 
   const handleEdit = (task) => () => {
     TASK.current = task;
-    setShowModal("edit");
+    setModal("edit");
   };
 
   const handleDelete = (task) => () => {
     TASK.current = task;
-    setShowModal("delete");
+    setModal("delete");
   };
 
   const handleCloseModal = () => {
-    setShowModal(null);
+    setModal(null);
   };
 
   const handleConfirmModal = (data) => {
-    switch (showModal) {
+    switch (modal) {
       case "delete": {
         dispatch({
           type: DELETE_TASK_REQUEST,
@@ -68,13 +68,12 @@ export const ToDoList = memo(() => {
       }
       default:
     }
-    setShowModal(null);
+    setModal(null);
   };
 
   return (
     <PageWrapper>
       <div className="to-do-list">
-        <AddToDo />
         {tasks.map((task, index) => (
           <ToDoTask
             key={task.id}
@@ -88,14 +87,14 @@ export const ToDoList = memo(() => {
         ))}
       </div>
       <Modal
-        show={showModal === "delete"}
+        show={modal === "delete"}
         title="Are you sure?"
         body="This action can't be undone."
         onClose={handleCloseModal}
         onConfirm={handleConfirmModal}
       />
       <Modal
-        show={showModal === "edit"}
+        show={modal === "edit"}
         title="Edit task"
         fields={[
           {
@@ -109,6 +108,12 @@ export const ToDoList = memo(() => {
             label: "Description",
             type: "text",
             value: TASK?.current?.description,
+          },
+          {
+            name: "remind",
+            label: "Remind",
+            type: "datetime-local",
+            value: TASK?.current?.remind,
           },
         ]}
         onClose={handleCloseModal}

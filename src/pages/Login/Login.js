@@ -12,6 +12,7 @@ import {
   Container,
 } from "@mui/material";
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
+import { grey } from "@mui/material/colors";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Copyright } from "../../components/Copyright/Copyright";
 import { LOGIN_REQUEST } from "../../constants/user";
@@ -48,7 +49,7 @@ export const Login = memo(() => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: grey[500] }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
