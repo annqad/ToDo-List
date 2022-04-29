@@ -7,6 +7,7 @@ import {
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
 } from "@mui/icons-material";
+import { grey } from "@mui/material/colors";
 import { PageWrapper } from "../../components/PageWrapper/PageWrapper";
 import { Loader } from "../../components/Loader/Loader";
 import {
@@ -127,18 +128,17 @@ export const Profile = memo(() => {
           <Box component="label" className="upload">
             <EditIcon
               className="icon"
-              sx={{ color: "#FFFFFF", fontSize: "50px" }}
+              sx={{ color: "#FFFFFF", fontSize: "100px" }}
             />
             <input type="file" accept="image/*" hidden onChange={handleImage} />
           </Box>
           <Avatar
             sx={{
-              width: "200px",
-              height: "200px",
+              width: "300px",
+              height: "300px",
               margin: "auto",
-              marginBottom: "4px",
-              fontSize: "50px",
-              bgcolor: "secondary.main",
+              fontSize: "100px",
+              bgcolor: grey[500],
             }}
             alt="Anya Dao"
             src={avatar || profile.avatar}

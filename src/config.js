@@ -40,7 +40,7 @@ export const POSTS_PAGE = "Posts";
 
 export const pages = [TO_DO_LIST_PAGE, POSTS_PAGE];
 
-// export const ADD_TASK_MODAL = "ADD_TASK_MODAL";
-// export const EDIT_TASK_MODAL = "EDIT_TASK_MODAL";
-// export const DELETE_TASK_MODAL = "DELETE_TASK_MODAL";
-// export const ADD_POST_MODAL = "ADD_POST_MODAL";
+export const ADD_TASK_MODAL = "ADD_TASK_MODAL";
+export const EDIT_TASK_MODAL = "EDIT_TASK_MODAL";
+export const DELETE_TASK_MODAL = "DELETE_TASK_MODAL";
+export const ADD_POST_MODAL = "ADD_POST_MODAL";

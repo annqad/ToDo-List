@@ -8,10 +8,19 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { fieldsToData } from "../../helpers";
+import { fieldsToData } from "../../../../helpers";
 
 export const Modal = memo(
-  ({ show, title, body, fields = [], children, onClose, onConfirm }) => {
+  ({
+    show,
+    title,
+    body,
+    fields = [],
+    children,
+    modalProps,
+    onClose,
+    onConfirm,
+  }) => {
     const [data, setData] = useState({});
 
     const handleClose = () => {
@@ -39,6 +48,7 @@ export const Modal = memo(
       <Dialog
         open={show}
         onClose={handleClose}
+        {...modalProps}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >

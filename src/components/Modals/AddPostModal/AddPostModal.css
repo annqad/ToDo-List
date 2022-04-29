@@ -1,0 +1,23 @@
+.thumbnail {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+}
+
+.edit {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 100%;
+  opacity: 0;
+  border-radius: 4px;
+  z-index: 1;
+  transition: all 0.5s;
+}
+
+.edit:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.5);
+}

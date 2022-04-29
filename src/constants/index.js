@@ -1,5 +1,7 @@
 export const SHOW_ERROR_ALERT = "SHOW_ERROR_ALERT";
-
 export const HIDE_ERROR_ALERT = "HIDE_ERROR_ALERT";
+
+export const SHOW_MODAL = "SHOW_MODAL";
+export const HIDE_MODAL = "HIDE_MODAL";
 
 export const CLEAR_REDUX_STATE = "CLEAR_REDUX_STATE";
