@@ -20,7 +20,7 @@ const store = createStore(
     applyMiddleware(sagaMiddleware),
     applyMiddleware(userMiddleware),
     applyMiddleware(errorMiddleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    window.__REDUX_DEVTOOLS_EXTENSION__?.()
   )
 );
 

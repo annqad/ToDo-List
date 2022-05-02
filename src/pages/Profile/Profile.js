@@ -26,7 +26,7 @@ import "./Profile.css";
 export const Profile = memo(() => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
-  const [subscription, setSubscription] = useState();
+  const [subscription, setSubscription] = useState(false);
   const [avatar, setAvatar] = useState();
   const [audio, setAudio] = useState();
   const [data, setData] = useState({
@@ -65,7 +65,18 @@ export const Profile = memo(() => {
     }
   };
 
-  const handleSave = () =>
+  const handleSave = async () => {
+    let subscriptionData = null;
+
+    setLoading(true);
+
+    if (subscription) {
+      subscriptionData = await subscribeToNotifications();
+      subscriptionData = subscriptionData.toJSON();
+    } else {
+      await unsubscribeFromNotifications();
+    }
+
     dispatch({
       type: CHANGE_PROFILE_REQUEST,
       payload: {
@@ -73,24 +84,22 @@ export const Profile = memo(() => {
           ...data,
           ...(avatar ? { avatar } : {}),
           ...(audio ? { audio } : {}),
-          ...{ subscription },
+          ...{ subscription: subscriptionData },
         },
       },
     });
+    setLoading(false);
+  };
 
   const handleNotifications = async () => {
     try {
       if (!subscription) {
         const result = await askNotificationPermission();
         if (result === "granted") {
-          setLoading(true);
-          const subscription = await subscribeToNotifications();
-          setSubscription(subscription.toJSON());
-          setLoading(false);
+          setSubscription(true);
         }
       } else {
-        await unsubscribeFromNotifications();
-        setSubscription(null);
+        setSubscription(false);
       }
     } catch (error) {
       dispatch({
@@ -117,7 +126,7 @@ export const Profile = memo(() => {
       lastName: profile.lastName,
     });
 
-    setSubscription(profile.subscription);
+    setSubscription(!!profile.subscription);
   }, [profile]);
 
   return (
@@ -138,12 +147,12 @@ export const Profile = memo(() => {
               height: "300px",
               margin: "auto",
               fontSize: "100px",
-              bgcolor: grey[500],
+              bgcolor: avatar || profile.avatar ? grey[500] : profile.bgcolor,
             }}
-            alt="Anya Dao"
+            alt="user avatar"
             src={avatar || profile.avatar}
           >
-            {getInitials(profile.firstName, profile.secondName) || (
+            {getInitials(profile.firstName, profile.lastName) || (
               <PersonIcon sx={{ fontSize: "100px" }} />
             )}
           </Avatar>

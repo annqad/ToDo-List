@@ -50,11 +50,11 @@ export const getAudioDuration = (dataURL) =>
     );
   });
 
-export const getInitials = (firstName, secondName) => {
-  if (!firstName && !secondName) {
+export const getInitials = (firstName, lastName) => {
+  if (!firstName && !lastName) {
     return null;
   }
-  return `${firstName}${secondName}`.toUpperCase();
+  return `${firstName[0] || ""}${lastName[0] || ""}`.toUpperCase();
 };
 
 export const msTo = (format, ms) => {
@@ -173,4 +173,54 @@ export const getNotificationsSubscription = async () => {
   const registration = await getServiceWorkerRegistration();
 
   return registration.pushManager.getSubscription();
+};
+
+export const convertDate = (date) => {
+  if (!date) {
+    return null;
+  }
+
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+  return new Date(date).toLocaleString("en-US", options);
+};
+
+export const randomColor = () => {
+  const hex = Math.floor(Math.random() * 0xffffff);
+  const color = "#" + hex.toString(16);
+
+  return color;
+};
+
+export const timeSince = (date) => {
+  const seconds = Math.floor((new Date() - new Date(date).getTime()) / 1000);
+
+  let interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " years ago";
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + " months ago";
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + " days ago";
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + " hours ago";
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes ago";
+  }
+  return Math.floor(seconds) + " seconds ago";
 };

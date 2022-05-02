@@ -208,9 +208,12 @@ export const Header = memo(() => {
                 <Avatar
                   alt="Anya Dao"
                   src={profile.avatar}
-                  sx={{ bgcolor: grey[500], fontSize: "14px" }}
+                  sx={{
+                    bgcolor: profile.avatar ? grey[500] : profile.bgcolor,
+                    fontSize: "14px",
+                  }}
                 >
-                  {getInitials(profile.firstName, profile.secondName) || (
+                  {getInitials(profile.firstName, profile.lastName) || (
                     <PersonIcon />
                   )}
                 </Avatar>

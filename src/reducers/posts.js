@@ -3,9 +3,14 @@ import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
+  GET_POST_REQUEST,
+  GET_POST_SUCCESS,
+  GET_POST_FAILURE,
 } from "../constants/posts";
 
 const initialState = {
+  posts: [],
+  post: {},
   loading: false,
   error: null,
 };
@@ -21,11 +26,31 @@ export const posts = (state = initialState, action) => {
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        profile: action.payload.profile,
+        posts: [...state.posts, action.payload.post],
         loading: false,
       };
 
     case ADD_POST_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
+
+    case GET_POST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case GET_POST_SUCCESS:
+      return {
+        ...state,
+        post: action.payload.post,
+        loading: false,
+      };
+
+    case GET_POST_FAILURE:
       return {
         ...state,
         loading: false,

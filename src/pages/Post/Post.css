@@ -1,0 +1,15 @@
+.post {
+    margin-top: 20px;
+}
+
+.likes {
+    display: flex;
+    align-items: center;
+}
+
+.caption {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}

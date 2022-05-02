@@ -86,10 +86,9 @@ export const AddPostModal = memo(() => {
             height: "auto",
             margin: "auto",
             fontSize: "50px",
-            borderRadius: "4px",
             bgcolor: grey[500],
           }}
-          variant="square"
+          variant="rounded"
           alt="post thumbnail"
           src={thumbnail}
         >
