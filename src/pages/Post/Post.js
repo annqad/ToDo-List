@@ -10,12 +10,12 @@ import {
 } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 import { PageWrapper } from "../../components/PageWrapper/PageWrapper";
-import { SHOW_ERROR_ALERT } from "../../constants";
-import { GET_POST_REQUEST } from "../../constants/posts";
 import { commentsSocket } from "../../sockets";
 import { convertDate } from "../../helpers";
-import "./Post.css";
 import { Comment } from "./components/Comment/Comment";
+import { SHOW_ALERT } from "../../constants/app";
+import { GET_POST_REQUEST } from "../../constants/posts";
+import "./Post.css";
 
 export const Post = memo(() => {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ export const Post = memo(() => {
 
   const handleDelete = useCallback((id) => () => {}, []);
 
-  const handleLike = useCallback(() => {}, []);
+  const handleLike = useCallback((id) => {}, []);
 
   useEffect(() => {
     if (postId) {
@@ -59,7 +59,7 @@ export const Post = memo(() => {
       commentsSocket.on("joined", (payload) => setComments(payload.comments));
       commentsSocket.on("error", (error) =>
         dispatch({
-          type: SHOW_ERROR_ALERT,
+          type: SHOW_ALERT,
           payload: {
             error,
           },
@@ -78,87 +78,89 @@ export const Post = memo(() => {
       setComments([...comments, payload.comment])
     );
   }, [comments]);
-  // console.log(post);
+
   return (
     <PageWrapper>
-      <div className="post">
-        <Avatar
-          sx={{
-            width: "400px",
-            minHeight: "400px",
-            height: "auto",
-            margin: "auto",
-            fontSize: "50px",
-            bgcolor: grey[500],
-          }}
-          variant="rounded"
-          alt="post thumbnail"
-          src={post.thumbnail}
-        >
-          <PhotoCameraIcon sx={{ fontSize: "100px" }} />
-        </Avatar>
-        <Box sx={{ width: "100%", maxWidth: "400px", marginTop: "8px" }}>
-          <Typography
-            sx={{ fontWeight: "bold" }}
-            variant="subtitle1"
-            component="div"
-            gutterBottom
+      {post.id && (
+        <div className="post">
+          <Avatar
+            sx={{
+              width: "400px",
+              minHeight: "400px",
+              height: "auto",
+              margin: "auto",
+              fontSize: "50px",
+              bgcolor: grey[500],
+            }}
+            variant="rounded"
+            alt="post thumbnail"
+            src={post.thumbnail}
           >
-            {post.title}
-          </Typography>
-          <Typography
-            sx={{ textAlign: "justify" }}
-            variant="subtitle2"
-            component="div"
-            gutterBottom
-          >
-            {post.description}
-          </Typography>
-          <div className="caption">
-            <div className="likes">
-              <FavoriteBorderIcon
-                sx={{ marginRight: "4px", cursor: "pointer" }}
-                onClick={handleLike}
-              />
-              <Typography variant="subtitle1" component="div">
-                {post.likes}
+            <PhotoCameraIcon sx={{ fontSize: "100px" }} />
+          </Avatar>
+          <Box sx={{ width: "100%", maxWidth: "400px", marginTop: "8px" }}>
+            <Typography
+              sx={{ fontWeight: "bold" }}
+              variant="subtitle1"
+              component="div"
+              gutterBottom
+            >
+              {post.title}
+            </Typography>
+            <Typography
+              sx={{ textAlign: "justify" }}
+              variant="subtitle2"
+              component="div"
+              gutterBottom
+            >
+              {post.description}
+            </Typography>
+            <div className="caption">
+              <div className="likes">
+                <FavoriteBorderIcon
+                  sx={{ marginRight: "4px", cursor: "pointer" }}
+                  onClick={handleLike}
+                />
+                <Typography variant="subtitle1" component="div">
+                  {post.likes}
+                </Typography>
+              </div>
+              <Typography variant="subtitle2" display="block" gutterBottom>
+                {convertDate(post.createdAt || post.updatedAt)}
               </Typography>
             </div>
-            <Typography variant="subtitle2" display="block" gutterBottom>
-              {convertDate(post.createdAt || post.updatedAt)}
-            </Typography>
-          </div>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          {comments.map(({ id, text, user, createdAt, updatedAt }) => (
-            <Comment
-              key={id}
-              avatar={user.avatar}
-              firstName={user.firstName}
-              lastName={user.lastName}
-              bgcolor={user.bgcolor}
-              text={text}
-              createdAt={createdAt}
-              updatedAt={updatedAt}
-              canDelete={user.id === profile.id}
-              canEdit={user.id === profile.id}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            {comments.map(({ id, text, user, createdAt, updatedAt }) => (
+              <Comment
+                key={id}
+                avatar={user.avatar}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                bgcolor={user.bgcolor}
+                text={text}
+                createdAt={createdAt}
+                updatedAt={updatedAt}
+                canDelete={user.id === profile.id}
+                canEdit={user.id === profile.id}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </Box>
+          <Box sx={{ display: "flex", margin: "8px 0px 24px 0px" }}>
+            <TextField
+              fullWidth
+              sx={{ marginRight: "8px" }}
+              value={text}
+              onChange={handleChange}
             />
-          ))}
-        </Box>
-        <Box sx={{ display: "flex", margin: "8px 0px 24px 0px" }}>
-          <TextField
-            fullWidth
-            sx={{ marginRight: "8px" }}
-            value={text}
-            onChange={handleChange}
-          />
-          <Button onClick={handleSend} variant="contained">
-            <SendIcon />
-          </Button>
-        </Box>
-      </div>
+            <Button onClick={handleSend} variant="contained">
+              <SendIcon />
+            </Button>
+          </Box>
+        </div>
+      )}
     </PageWrapper>
   );
 });

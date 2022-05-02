@@ -19,8 +19,8 @@ import {
   unsubscribeFromNotifications,
   getInitials,
 } from "../../helpers";
-import { CHANGE_PROFILE_REQUEST } from "../../constants/user";
-import { SHOW_ERROR_ALERT } from "../../constants";
+import { EDIT_PROFILE_REQUEST } from "../../constants/user";
+import { SHOW_ALERT } from "../../constants/app";
 import "./Profile.css";
 
 export const Profile = memo(() => {
@@ -54,7 +54,7 @@ export const Profile = memo(() => {
     const duration = await getAudioDuration(dataURL);
     if (duration > 3) {
       dispatch({
-        type: SHOW_ERROR_ALERT,
+        type: SHOW_ALERT,
         payload: {
           error: "File too big. Maximum duration is 3 seconds.",
         },
@@ -78,7 +78,7 @@ export const Profile = memo(() => {
     }
 
     dispatch({
-      type: CHANGE_PROFILE_REQUEST,
+      type: EDIT_PROFILE_REQUEST,
       payload: {
         data: {
           ...data,
@@ -103,7 +103,7 @@ export const Profile = memo(() => {
       }
     } catch (error) {
       dispatch({
-        type: SHOW_ERROR_ALERT,
+        type: SHOW_ALERT,
         payload: {
           error: error.message,
         },

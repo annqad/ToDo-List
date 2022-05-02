@@ -32,7 +32,7 @@ import {
   ADD_POST_MODAL,
 } from "../../config";
 import { getInitials } from "../../helpers";
-import { SHOW_MODAL } from "../../constants";
+import { SHOW_MODAL } from "../../constants/app";
 import "./Header.css";
 
 export const Header = memo(() => {

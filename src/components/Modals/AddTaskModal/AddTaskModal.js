@@ -4,7 +4,7 @@ import { Modal } from "../components/Modal/Modal";
 import { getInputDate } from "../../../helpers";
 import { ADD_TASK_MODAL } from "../../../config";
 import { ADD_TASK_REQUEST } from "../../../constants/tasks";
-import { HIDE_MODAL } from "../../../constants";
+import { HIDE_MODAL } from "../../../constants/app";
 
 export const AddTaskModal = memo(() => {
   const data = useSelector((state) => state.app.modals[ADD_TASK_MODAL]);

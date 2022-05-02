@@ -224,3 +224,5 @@ export const timeSince = (date) => {
   }
   return Math.floor(seconds) + " seconds ago";
 };
+
+export const randomId = () => (Math.random() + 1).toString(36).substring(7);

@@ -1,27 +1,13 @@
-import { memo, Fragment, useRef, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { memo, Fragment, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { Router } from "./Router";
 import { Loader } from "./components/Loader/Loader";
-import { Alert } from "./components/Alert/Alert";
-import { HIDE_ERROR_ALERT } from "./constants";
-import { useLoading } from "./hooks/useLoading";
-import { useError } from "./hooks/useError";
+import { Alerts } from "./components/Alerts/Alerts";
 import { Modals } from "./components/Modals/Modals";
 
 export const App = memo(() => {
-  const errorRef = useRef();
-  const dispatch = useDispatch();
-
-  const error = useError();
-  const loading = useLoading();
   const profile = useSelector((state) => state.user.profile);
-
-  const handleClose = useCallback(() => {
-    dispatch({
-      type: HIDE_ERROR_ALERT,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const loadings = useSelector((state) => state.app.loadings);
 
   const handleMessage = useCallback(
     (event) => {
@@ -40,12 +26,6 @@ export const App = memo(() => {
   );
 
   useEffect(() => {
-    if (error) {
-      errorRef.current = error;
-    }
-  }, [error]);
-
-  useEffect(() => {
     navigator?.serviceWorker?.addEventListener("message", handleMessage);
     return () =>
       navigator?.serviceWorker?.removeEventListener("message", handleMessage);
@@ -53,14 +33,10 @@ export const App = memo(() => {
 
   return (
     <Fragment>
-      <Loader show={loading} />
+      <Loader show={!!loadings} />
       <Modals />
-      <Alert
-        show={!!error}
-        message={error || errorRef.current}
-        onClose={handleClose}
-      />
       <Router />
+      <Alerts />
     </Fragment>
   );
 });

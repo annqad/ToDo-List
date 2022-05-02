@@ -1,4 +1,4 @@
-import { CLEAR_REDUX_STATE } from "./constants";
+import { CLEAR_REDUX_STATE } from "./constants/app";
 import {
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,

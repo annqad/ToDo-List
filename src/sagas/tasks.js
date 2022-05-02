@@ -6,8 +6,8 @@ import {
   DELETE_TASK_SUCCESS,
   LOAD_TASKS_FAILURE,
   LOAD_TASKS_SUCCESS,
-  CHANGE_TASK_FAILURE,
-  CHANGE_TASK_SUCCESS,
+  EDIT_TASK_FAILURE,
+  EDIT_TASK_SUCCESS,
   ADD_TASK_SUCCESS,
   ADD_TASK_FAILURE,
 } from "../constants/tasks";
@@ -58,14 +58,14 @@ export function* changeTaskRequest({ payload }) {
     const { data } = yield api.authenticated().put(`${URL}tasks`, payload.data);
 
     yield put({
-      type: CHANGE_TASK_SUCCESS,
+      type: EDIT_TASK_SUCCESS,
       payload: {
         task: data.task,
       },
     });
   } catch (error) {
     yield put({
-      type: CHANGE_TASK_FAILURE,
+      type: EDIT_TASK_FAILURE,
       payload: {
         error: getErrorMessage(error),
       },

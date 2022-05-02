@@ -10,8 +10,8 @@ import {
   LOGOUT_FAILURE,
   LOAD_PROFILE_SUCCESS,
   LOAD_PROFILE_FAILURE,
-  CHANGE_PROFILE_SUCCESS,
-  CHANGE_PROFILE_FAILURE,
+  EDIT_PROFILE_SUCCESS,
+  EDIT_PROFILE_FAILURE,
 } from "../constants/user";
 import { getErrorMessage } from "../helpers";
 
@@ -104,14 +104,14 @@ export function* changeProfileRequest({ payload }) {
       .put(`${URL}user/profile`, payload.data);
 
     yield put({
-      type: CHANGE_PROFILE_SUCCESS,
+      type: EDIT_PROFILE_SUCCESS,
       payload: {
         profile: data.profile,
       },
     });
   } catch (error) {
     yield put({
-      type: CHANGE_PROFILE_FAILURE,
+      type: EDIT_PROFILE_FAILURE,
       payload: {
         error: getErrorMessage(error),
       },

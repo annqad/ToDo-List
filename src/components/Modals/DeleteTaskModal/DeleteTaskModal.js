@@ -2,7 +2,7 @@ import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "../components/Modal/Modal";
 import { DELETE_TASK_MODAL } from "../../../config";
-import { HIDE_MODAL } from "../../../constants";
+import { HIDE_MODAL } from "../../../constants/app";
 import { DELETE_TASK_REQUEST } from "../../../constants/tasks";
 
 export const DeleteTaskModal = memo(() => {

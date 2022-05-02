@@ -10,7 +10,7 @@ import { Modal } from "../components/Modal/Modal";
 import { fileToDataURL } from "../../../helpers";
 import { ADD_POST_MODAL } from "../../../config";
 import { ADD_POST_REQUEST } from "../../../constants/posts";
-import { HIDE_MODAL } from "../../../constants";
+import { HIDE_MODAL } from "../../../constants/app";
 import "./AddPostModal.css";
 
 export const AddPostModal = memo(() => {

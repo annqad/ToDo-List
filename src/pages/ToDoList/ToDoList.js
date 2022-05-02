@@ -1,11 +1,11 @@
 import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToDoTask } from "./components/ToDoTask/ToDoTask";
-import { CHANGE_TASK_REQUEST } from "../../constants/tasks";
-import { SHOW_MODAL } from "../../constants/index";
+import { EDIT_TASK_REQUEST } from "../../constants/tasks";
+import { SHOW_MODAL } from "../../constants/app";
 import { PageWrapper } from "../../components/PageWrapper/PageWrapper";
-import "./ToDoList.css";
 import { EDIT_TASK_MODAL, DELETE_TASK_MODAL } from "../../config";
+import "./ToDoList.css";
 
 export const ToDoList = memo(() => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export const ToDoList = memo(() => {
 
   const handleCheck = (id, completed) => () => {
     dispatch({
-      type: CHANGE_TASK_REQUEST,
+      type: EDIT_TASK_REQUEST,
       payload: {
         data: {
           id,

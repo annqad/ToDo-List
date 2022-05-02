@@ -1,28 +1,58 @@
 import {
   CLEAR_REDUX_STATE,
-  SHOW_ERROR_ALERT,
-  HIDE_ERROR_ALERT,
+  SHOW_ALERT,
+  HIDE_ALERT,
   SHOW_MODAL,
   HIDE_MODAL,
-} from "../constants";
+} from "../constants/app";
+import { randomId } from "../helpers";
 
 const initialState = {
   modals: {},
-  error: null,
+  alerts: [],
+  loadings: 0,
 };
 
 export const app = (state = initialState, action) => {
   switch (action.type) {
-    case SHOW_ERROR_ALERT:
+    case action.type.match(/_REQUEST/)?.input:
       return {
         ...state,
-        error: action.payload.error,
+        loadings: ++state.loadings,
       };
 
-    case HIDE_ERROR_ALERT:
+    case action.type.match(/_SUCCESS/)?.input:
       return {
         ...state,
-        error: null,
+        loadings: --state.loadings,
+      };
+
+    case action.type.match(/_FAILURE/)?.input:
+      return {
+        ...state,
+        loadings: --state.loadings,
+        alerts: [
+          ...state.alerts,
+          {
+            id: randomId(),
+            type: "error",
+            message: action.payload.error,
+          },
+        ],
+      };
+
+    case SHOW_ALERT:
+      return {
+        ...state,
+        alerts: [...state.alerts, ...action.payload.alert],
+      };
+
+    case HIDE_ALERT:
+      return {
+        ...state,
+        alerts: state.alerts.filter(
+          (alert) => alert.id !== action.payload.alertId
+        ),
       };
 
     case SHOW_MODAL:
