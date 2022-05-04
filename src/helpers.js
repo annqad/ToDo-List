@@ -226,3 +226,11 @@ export const timeSince = (date) => {
 };
 
 export const randomId = () => (Math.random() + 1).toString(36).substring(7);
+
+export const scrollDown = () => {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    left: 0,
+    behavior: "smooth",
+  });
+};

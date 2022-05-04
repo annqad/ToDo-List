@@ -44,7 +44,7 @@ export const app = (state = initialState, action) => {
     case SHOW_ALERT:
       return {
         ...state,
-        alerts: [...state.alerts, ...action.payload.alert],
+        alerts: [...state.alerts, action.payload.alert],
       };
 
     case HIDE_ALERT:

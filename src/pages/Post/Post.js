@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Typography, Box, TextField, Button } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -7,21 +7,26 @@ import {
   // Favorite as FavoriteIcon,
   FavoriteBorder as FavoriteBorderIcon,
   Send as SendIcon,
+  Edit as EditIcon,
 } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 import { PageWrapper } from "../../components/PageWrapper/PageWrapper";
 import { commentsSocket } from "../../sockets";
-import { convertDate } from "../../helpers";
+import { convertDate, scrollDown } from "../../helpers";
 import { Comment } from "./components/Comment/Comment";
-import { SHOW_ALERT } from "../../constants/app";
+import { useShowAlert } from "../../hooks/useShowAlert";
 import { GET_POST_REQUEST } from "../../constants/posts";
 import "./Post.css";
 
 export const Post = memo(() => {
   const dispatch = useDispatch();
-  const { postId } = useParams();
+  const showAlert = useShowAlert();
+  const inputRef = useRef();
+  const textRef = useRef();
   const profile = useSelector((state) => state.user.profile);
   const post = useSelector((state) => state.posts.post);
+  const { postId } = useParams();
+  const [commentIdToEdit, setCommentIdToEdit] = useState(null);
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
 
@@ -31,17 +36,42 @@ export const Post = memo(() => {
 
   const handleSend = useCallback(() => {
     if (text.trim()) {
-      commentsSocket.emit("send", {
-        postId,
-        text: text.trim(),
-      });
-      setText("");
+      if (commentIdToEdit) {
+        commentsSocket.emit("edit", {
+          commentId: commentIdToEdit,
+          text: text.trim(),
+        });
+        setText(textRef.current);
+        setCommentIdToEdit(null);
+      } else {
+        commentsSocket.emit("send", {
+          postId,
+          text: text.trim(),
+        });
+        setText("");
+      }
+      inputRef.current.focus();
     }
-  }, [text, postId]);
+  }, [text, postId, commentIdToEdit]);
 
-  const handleEdit = useCallback((id) => () => {}, []);
+  const handleEdit = useCallback(
+    (commentId, commentText) => () => {
+      textRef.current = text;
+      setCommentIdToEdit(commentId);
+      setText(commentText);
+      inputRef.current.focus();
+    },
+    [text]
+  );
 
-  const handleDelete = useCallback((id) => () => {}, []);
+  const handleDelete = useCallback(
+    (commentId) => () => {
+      commentsSocket.emit("delete", {
+        commentId,
+      });
+    },
+    []
+  );
 
   const handleLike = useCallback((id) => {}, []);
 
@@ -57,14 +87,7 @@ export const Post = memo(() => {
         postId,
       });
       commentsSocket.on("joined", (payload) => setComments(payload.comments));
-      commentsSocket.on("error", (error) =>
-        dispatch({
-          type: SHOW_ALERT,
-          payload: {
-            error,
-          },
-        })
-      );
+      commentsSocket.on("error", (error) => showAlert("error", error));
       return () => {
         commentsSocket.emit("leave");
         commentsSocket.off();
@@ -74,9 +97,37 @@ export const Post = memo(() => {
   }, []);
 
   useEffect(() => {
-    commentsSocket.on("sent", (payload) =>
-      setComments([...comments, payload.comment])
-    );
+    commentsSocket.on("sent", (payload) => {
+      setComments([...comments, payload.comment]);
+      scrollDown();
+    });
+    commentsSocket.on("deleted", (payload) => {
+      setComments(
+        comments.filter((comment) => comment.id !== payload.commentId)
+      );
+      showAlert("success", "Comment has been deleted.");
+    });
+
+    commentsSocket.on("edited", (payload) => {
+      setComments(
+        comments.map((comment) =>
+          comment.id === payload.commentId
+            ? {
+                ...comment,
+                text: payload.text,
+                updatedAt: payload.updatedAt,
+              }
+            : comment
+        )
+      );
+      showAlert("success", "Comment has been edited.");
+    });
+    return () => {
+      commentsSocket.removeListener("sent");
+      commentsSocket.removeListener("deleted");
+      commentsSocket.removeListener("edited");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comments]);
 
   return (
@@ -143,20 +194,21 @@ export const Post = memo(() => {
                 updatedAt={updatedAt}
                 canDelete={user.id === profile.id}
                 canEdit={user.id === profile.id}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
+                onEdit={handleEdit(id, text)}
+                onDelete={handleDelete(id)}
               />
             ))}
           </Box>
           <Box sx={{ display: "flex", margin: "8px 0px 24px 0px" }}>
             <TextField
               fullWidth
+              inputRef={inputRef}
               sx={{ marginRight: "8px" }}
               value={text}
               onChange={handleChange}
             />
             <Button onClick={handleSend} variant="contained">
-              <SendIcon />
+              {commentIdToEdit ? <EditIcon /> : <SendIcon />}
             </Button>
           </Box>
         </div>

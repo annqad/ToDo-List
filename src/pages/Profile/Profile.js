@@ -19,13 +19,14 @@ import {
   unsubscribeFromNotifications,
   getInitials,
 } from "../../helpers";
+import { useShowAlert } from "../../hooks/useShowAlert";
 import { EDIT_PROFILE_REQUEST } from "../../constants/user";
-import { SHOW_ALERT } from "../../constants/app";
 import "./Profile.css";
 
 export const Profile = memo(() => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
+  const showAlert = useShowAlert();
   const [subscription, setSubscription] = useState(false);
   const [avatar, setAvatar] = useState();
   const [audio, setAudio] = useState();
@@ -53,12 +54,7 @@ export const Profile = memo(() => {
     const dataURL = await fileToDataURL(event.target.files[0]);
     const duration = await getAudioDuration(dataURL);
     if (duration > 3) {
-      dispatch({
-        type: SHOW_ALERT,
-        payload: {
-          error: "File too big. Maximum duration is 3 seconds.",
-        },
-      });
+      showAlert("error", "File too big. Maximum duration is 3 seconds.");
       event.target.value = null;
     } else {
       setAudio(dataURL);
@@ -102,12 +98,7 @@ export const Profile = memo(() => {
         setSubscription(false);
       }
     } catch (error) {
-      dispatch({
-        type: SHOW_ALERT,
-        payload: {
-          error: error.message,
-        },
-      });
+      showAlert("error", error.message);
     }
   };
 

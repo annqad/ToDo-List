@@ -48,7 +48,7 @@ export const Comment = memo(
             variant="caption"
             component="span"
           >
-            {timeSince(createdAt || updatedAt)}
+            {timeSince(updatedAt || createdAt)}
           </Typography>
         </Box>
         <Box>{text}</Box>
