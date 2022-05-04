@@ -6,6 +6,8 @@ import {
   ADD_POST_FAILURE,
   GET_POST_SUCCESS,
   GET_POST_FAILURE,
+  GET_POSTS_SUCCESS,
+  GET_POSTS_FAILURE,
 } from "../constants/posts";
 import { getErrorMessage } from "../helpers";
 
@@ -46,6 +48,26 @@ export function* getPostRequest({ payload }) {
   } catch (error) {
     yield put({
       type: GET_POST_FAILURE,
+      payload: {
+        error: getErrorMessage(error),
+      },
+    });
+  }
+}
+
+export function* getPostsRequest() {
+  try {
+    const { data } = yield api.authenticated().get(`${URL}posts`);
+
+    yield put({
+      type: GET_POSTS_SUCCESS,
+      payload: {
+        posts: data.posts,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: GET_POSTS_FAILURE,
       payload: {
         error: getErrorMessage(error),
       },

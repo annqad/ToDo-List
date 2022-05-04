@@ -1,5 +1,9 @@
 import { CLEAR_REDUX_STATE } from "../constants/app";
-import { ADD_POST_SUCCESS, GET_POST_SUCCESS } from "../constants/posts";
+import {
+  ADD_POST_SUCCESS,
+  GET_POST_SUCCESS,
+  GET_POSTS_SUCCESS,
+} from "../constants/posts";
 
 const initialState = {
   posts: [],
@@ -18,6 +22,12 @@ export const posts = (state = initialState, action) => {
       return {
         ...state,
         post: action.payload.post,
+      };
+
+    case GET_POSTS_SUCCESS:
+      return {
+        ...state,
+        posts: action.payload.posts,
       };
 
     case CLEAR_REDUX_STATE:

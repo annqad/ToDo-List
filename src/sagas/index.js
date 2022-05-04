@@ -12,7 +12,11 @@ import {
   LOAD_PROFILE_REQUEST,
   EDIT_PROFILE_REQUEST,
 } from "../constants/user";
-import { ADD_POST_REQUEST, GET_POST_REQUEST } from "../constants/posts";
+import {
+  ADD_POST_REQUEST,
+  GET_POST_REQUEST,
+  GET_POSTS_REQUEST,
+} from "../constants/posts";
 import {
   registerRequest,
   loginRequest,
@@ -26,7 +30,7 @@ import {
   changeTaskRequest,
   addTaskRequest,
 } from "./tasks";
-import { addPostRequest, getPostRequest } from "./posts";
+import { addPostRequest, getPostRequest, getPostsRequest } from "./posts";
 
 function* appSaga() {
   yield takeLatest(REGISTER_REQUEST, registerRequest);
@@ -42,6 +46,7 @@ function* appSaga() {
 
   yield takeLatest(ADD_POST_REQUEST, addPostRequest);
   yield takeLatest(GET_POST_REQUEST, getPostRequest);
+  yield takeLatest(GET_POSTS_REQUEST, getPostsRequest);
 }
 
 export default appSaga;
