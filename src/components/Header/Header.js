@@ -13,6 +13,7 @@ import {
   Tooltip,
   Menu,
   MenuItem,
+  Dialog,
 } from "@mui/material";
 import { Menu as MenuIcon, Person as PersonIcon } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
@@ -23,13 +24,16 @@ import {
   entities,
   TO_DO_LIST_PAGE,
   POSTS_PAGE,
+  CHATS_PAGE,
   PROFILE_SETTING,
   LOGOUT_SETTING,
   CREATE_SETTING,
   TASK_ENTITY,
   POST_ENTITY,
+  CHAT_ENTITY,
   ADD_TASK_MODAL,
   ADD_POST_MODAL,
+  ADD_CHAT_MODAL,
 } from "../../config";
 import { getInitials } from "../../helpers";
 import { SHOW_MODAL } from "../../constants/app";
@@ -39,6 +43,7 @@ export const Header = memo(() => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
+  const [isSelectEntityDialogOpened, setIsSelectEntityDialogOpened] = useState(false);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElCreate, setAnchorElCreate] = useState(null);
@@ -60,13 +65,13 @@ export const Header = memo(() => {
     setAnchorElCreate(null);
   };
 
-  const handleOpenCreateMenu = (event) => {
-    setAnchorElCreate(event.currentTarget);
-  };
+  // const handleOpenCreateMenu = (event) => {
+  //   setAnchorElCreate(event.currentTarget);
+  // };
 
-  const handleCloseCreateMenu = (event) => {
-    setAnchorElCreate(null);
-  };
+  // const handleCloseCreateMenu = (event) => {
+  //   setAnchorElCreate(null);
+  // };
 
   const handlePageClick = (page) => () => {
     switch (page) {
@@ -75,6 +80,9 @@ export const Header = memo(() => {
         break;
       case POSTS_PAGE:
         navigate("/posts");
+        break;
+      case CHATS_PAGE:
+        navigate("/chats");
         break;
       default:
     }
@@ -93,11 +101,15 @@ export const Header = memo(() => {
         });
         setAnchorElUser(null);
         break;
+      case CREATE_SETTING:
+        setIsSelectEntityDialogOpened(true);
+        break;
       default:
     }
   };
 
   const handleEntityClick = (entity) => () => {
+    setIsSelectEntityDialogOpened(false)
     switch (entity) {
       case TASK_ENTITY:
         dispatch({
@@ -115,27 +127,35 @@ export const Header = memo(() => {
           },
         });
         break;
+      case CHAT_ENTITY:
+        dispatch({
+          type: SHOW_MODAL,
+          payload: {
+            name: ADD_CHAT_MODAL,
+          },
+        });
+        break;
       default:
     }
 
     setAnchorElCreate(null);
   };
 
-  const handleSettingOver = (setting) => (event) => {
-    switch (setting) {
-      case PROFILE_SETTING:
-      case LOGOUT_SETTING:
-        handleCloseCreateMenu(null);
-        break;
-      case CREATE_SETTING:
-        handleOpenCreateMenu(event);
-        break;
-      default:
-    }
-  };
+  // const handleSettingOver = (setting) => (event) => {
+  //   switch (setting) {
+  //     case PROFILE_SETTING:
+  //     case LOGOUT_SETTING:
+  //       handleCloseCreateMenu(null);
+  //       break;
+  //     case CREATE_SETTING:
+  //       handleOpenCreateMenu(event);
+  //       break;
+  //     default:
+  //   }
+  // };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -247,7 +267,7 @@ export const Header = memo(() => {
                         : "none",
                   }}
                   onClick={handleSettingClick(name)}
-                  onMouseOver={handleSettingOver(name)}
+                // onMouseOver={handleSettingOver(name)}
                 >
                   <Icon sx={{ marginRight: "8px" }} />
                   <Typography textAlign="center" fontWeight="bold">
@@ -256,36 +276,35 @@ export const Header = memo(() => {
                 </MenuItem>
               ))}
             </Menu>
-            <Box
-              sx={{
-                position: "absolute",
-                display: anchorElCreate ? "block" : "none",
-                background: "#FFFFFF",
-                padding: "8px 0px",
-                borderRadius: "4px",
-                right: "121px",
-                top: "97px",
-                zIndex: 1400,
-              }}
-              boxShadow={3}
-              onMouseLeave={handleCloseCreateMenu}
-            >
-              {entities.map(({ name, Icon }) => (
-                <Box
-                  key={name}
-                  className="entity"
-                  onClick={handleEntityClick(name)}
-                >
-                  <Icon sx={{ marginRight: "8px" }} />
-                  <Typography textAlign="center" fontWeight="bold">
-                    {name}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
+            <SelectEntityDialog open={isSelectEntityDialogOpened} onClose={(e) => setIsSelectEntityDialogOpened(false)} onSelect={handleEntityClick} />
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 });
+
+const SelectEntityDialog = ({ open, onClose, onSelect }) => {
+  return (<Dialog onClose={onClose} open={open}>
+    <Box
+      sx={{
+        background: "#FFFFFF",
+        padding: "8px 0px",
+      }}
+      boxShadow={3}
+    >
+      {entities.map(({ name, Icon }) => (
+        <Box
+          key={name}
+          className="entity"
+          onClick={onSelect(name)}
+        >
+          <Icon sx={{ marginRight: "8px" }} />
+          <Typography textAlign="center" fontWeight="bold">
+            {name}
+          </Typography>
+        </Box>
+      ))}
+    </Box>
+  </Dialog>)
+}

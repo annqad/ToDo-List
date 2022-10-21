@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LOAD_TASKS_REQUEST } from "../constants/tasks";
 import { LOAD_PROFILE_REQUEST } from "../constants/user";
 import { getAuth } from "../helpers";
-import { commentsSocket } from "../sockets";
+import { commentsSocket, messagesSocket } from "../sockets";
 
 export const useRedirect = () => {
   const tokenRef = useRef(getAuth());
@@ -19,6 +19,9 @@ export const useRedirect = () => {
     }
     if (tokenRef.current && tokenRef.current !== commentsSocket.auth?.token) {
       commentsSocket.auth = { token: tokenRef.current };
+    }
+    if (tokenRef.current && tokenRef.current !== messagesSocket.auth?.token) {
+      messagesSocket.auth = { token: tokenRef.current };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);

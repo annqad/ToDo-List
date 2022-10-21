@@ -18,6 +18,15 @@ import {
   GET_POSTS_REQUEST,
 } from "../constants/posts";
 import {
+  ADD_CHAT_REQUEST,
+  GET_CHAT_REQUEST,
+  DELETE_CHAT_REQUEST,
+  GET_CHATS_REQUEST,
+} from "../constants/chats";
+import {
+  GET_USERS_REQUEST,
+} from "../constants/users";
+import {
   registerRequest,
   loginRequest,
   logoutRequest,
@@ -31,6 +40,8 @@ import {
   addTaskRequest,
 } from "./tasks";
 import { addPostRequest, getPostRequest, getPostsRequest } from "./posts";
+import { addChatRequest, deleteChatRequest, getChatRequest, getChatsRequest } from "./chats";
+import { getUsersRequest } from "./users";
 
 function* appSaga() {
   yield takeLatest(REGISTER_REQUEST, registerRequest);
@@ -47,6 +58,13 @@ function* appSaga() {
   yield takeLatest(ADD_POST_REQUEST, addPostRequest);
   yield takeLatest(GET_POST_REQUEST, getPostRequest);
   yield takeLatest(GET_POSTS_REQUEST, getPostsRequest);
+
+  yield takeLatest(ADD_CHAT_REQUEST, addChatRequest);
+  yield takeLatest(GET_CHAT_REQUEST, getChatRequest);
+  yield takeLatest(DELETE_CHAT_REQUEST, deleteChatRequest);
+  yield takeLatest(GET_CHATS_REQUEST, getChatsRequest);
+
+  yield takeLatest(GET_USERS_REQUEST, getUsersRequest);
 }
 
 export default appSaga;

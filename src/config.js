@@ -1,7 +1,7 @@
 import {
   ManageAccounts as ManageAccountsIcon,
-  EventAvailable as EventAvailableIcon,
   EventNote as EventNoteIcon,
+  Chat as ChatIcon,
   Create as CreateIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
@@ -23,24 +23,27 @@ export const settings = [
 
 export const TASK_ENTITY = "Task";
 export const POST_ENTITY = "Post";
+export const CHAT_ENTITY = "Chat";
 
 export const entities = [
   {
-    name: TASK_ENTITY,
-    Icon: EventAvailableIcon,
-  },
-  {
     name: POST_ENTITY,
     Icon: EventNoteIcon,
+  },
+  {
+    name: CHAT_ENTITY,
+    Icon: ChatIcon,
   },
 ];
 
 export const TO_DO_LIST_PAGE = "ToDo List";
 export const POSTS_PAGE = "Posts";
+export const CHATS_PAGE = "Chats";
 
-export const pages = [TO_DO_LIST_PAGE, POSTS_PAGE];
+export const pages = [POSTS_PAGE, CHATS_PAGE];
 
 export const ADD_TASK_MODAL = "ADD_TASK_MODAL";
 export const EDIT_TASK_MODAL = "EDIT_TASK_MODAL";
 export const DELETE_TASK_MODAL = "DELETE_TASK_MODAL";
 export const ADD_POST_MODAL = "ADD_POST_MODAL";
+export const ADD_CHAT_MODAL = "ADD_CHAT_MODAL";

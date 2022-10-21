@@ -73,7 +73,7 @@ export const Post = memo(() => {
     []
   );
 
-  const handleLike = useCallback((id) => {}, []);
+  const handleLike = useCallback((id) => { }, []);
 
   useEffect(() => {
     if (postId) {
@@ -113,10 +113,10 @@ export const Post = memo(() => {
         comments.map((comment) =>
           comment.id === payload.commentId
             ? {
-                ...comment,
-                text: payload.text,
-                updatedAt: payload.updatedAt,
-              }
+              ...comment,
+              text: payload.text,
+              updatedAt: payload.updatedAt,
+            }
             : comment
         )
       );
@@ -133,7 +133,7 @@ export const Post = memo(() => {
   return (
     <PageWrapper>
       {post.id && (
-        <div className="post">
+        <div className="post" style={{ marginTop: "76px" }}>
           <Avatar
             sx={{
               width: "400px",

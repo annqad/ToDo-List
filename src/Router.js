@@ -2,6 +2,7 @@ import { Fragment, memo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ToDoList } from "./pages/ToDoList/ToDoList";
 import { Posts } from "./pages/Posts/Posts";
+import { Chats } from "./pages/Chats/Chats";
 import { Post } from "./pages/Post/Post";
 import { Profile } from "./pages/Profile/Profile";
 import { Welcome } from "./pages/Welcome/Welcome";
@@ -32,6 +33,8 @@ export const Router = memo(() => {
       <Route exact path="/to-do/list" element={PrivateRoute(ToDoList)} />
       <Route exact path="/posts" element={PrivateRoute(Posts)} />
       <Route exact path="/posts/:postId" element={PrivateRoute(Post)} />
+      <Route exact path="/chats" element={PrivateRoute(Chats)} />
+      <Route exact path="/chats/:chatId" element={PrivateRoute(Chats)} />
       <Route exact path="/profile" element={PrivateRoute(Profile)} />
       <Route exact path="/login" element={PublicRoute(Login)} />
       <Route exact path="/register" element={PublicRoute(Register)} />

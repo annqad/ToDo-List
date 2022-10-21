@@ -18,7 +18,7 @@ export const Posts = memo(() => {
 
   return (
     <PageWrapper>
-      <Box sx={{ marginTop: "20px" }}>
+      <Box sx={{ marginTop: "64px" }}>
         {posts.map(({ id, thumbnail, description }) => (
           <Post
             key={id}

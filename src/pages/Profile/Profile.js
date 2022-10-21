@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Fragment, memo, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, TextField, Button, Box } from "@mui/material";
@@ -158,7 +159,7 @@ export const Profile = memo(() => {
             onChange={handleChange}
           />
         ))}
-        <Button
+        {/* <Button
           variant="outlined"
           component="label"
           sx={{ marginTop: "8px", marginBottom: "4px", position: "relative" }}
@@ -177,14 +178,14 @@ export const Profile = memo(() => {
             </Fragment>
           )}
           <input type="file" accept=".mp3" hidden onChange={handleAudio} />
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           variant="outlined"
           sx={{ marginTop: "8px", marginBottom: "4px" }}
           onClick={handleNotifications}
         >
           {`${subscription ? "DISABLE" : "ENABLE"} NOTIFICATIONS`}
-        </Button>
+        </Button> */}
         <Button
           variant="outlined"
           sx={{ marginTop: "8px" }}
